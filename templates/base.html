@@ -1,0 +1,213 @@
+<!doctype html>
+{% load static %}
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% comment %} Font Family {% endcomment %}
+    <link href="https://fonts.googleapis.com/css?family=Staatliches" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/master.css' %}" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% block css %}
+    {% endblock css %}
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+  <body class="text-success skeleton">
+    {% block nav %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border border-dark">
+    <div class="container">
+        <a class="navbar-brand text-success navicon" href="{% url 'home' %}"><strong>Navbar</strong></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            
+            
+            {% if user.is_authenticated %}
+                <ul class="navbar-nav">
+                <li {% block New-active %}
+                    class="nav-item"
+                    {% endblock New-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'site:new' %}">New Topic</a>
+                </li>
+                <li {% block Qlist-active %}
+                    class="nav-item"
+                    {% endblock Qlist-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'site:ques_list' %}">Questions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'site:topic_list' %}">Blog</a>
+                </li>
+                </ul>
+                {% if user.is_superuser %}
+                    <div class="btn-group">
+                        <button type="button" class ="btn btn-outline-success text-center">{{ user }}</button>
+                        <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark">
+                            <a class="nav-link btn-outline-success text-center" href="{% url 'admin:login' %}">Admin Interface</a>
+                            <a class="nav-link btn-outline-success text-center" href="{% url 'site:profile' user.pk %}">Settings</a>
+                            <div class="dropdown-divider border-success"></div>
+                            <a class="nav-link btn-outline-success text-center" href="{% url 'site:logout' %}">Logout</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="btn-group  text-center">
+                        <a href="{% url 'site:report' %}"><button class="btn btn-outline-success my-2 my-sm-0 mx-3" type="button">Report</button></a>
+                        <button type="button" class ="btn btn-outline-success text-center">{{ user }}</button>
+                        <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark">
+                            <a class="nav-link btn-outline-success text-center" href="{% url 'site:profile' user.pk %}">Settings</a>
+                            <div class="dropdown-divider border-success"></div>
+                            <a class="nav-link btn-outline-success text-center" href="{% url 'site:logout' %}">Logout</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+            <ul class="navbar-nav">
+                <li {% block Home-active %}
+                    class="nav-item"
+                {% endblock Home-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li {% block List-active %}
+                    class="nav-item"
+                {% endblock List-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'verify:list' %}">Upload List</a>
+                </li>
+                <li {% block Single-active %}
+                    class="nav-item"
+                {% endblock Single-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'verify:single' %}">Single Email</a>
+                </li>
+                <li {% block Topic-active %}
+                    class="nav-item"
+                    {% endblock Topic-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'site:topic_list' %}">Blog</a>
+                </li>
+                <li {% block Q-active %}
+                    class="nav-item"
+                    {% endblock Q-active %}>
+                    <a class="nav-link btn-outline-success text-center rounded" href="{% url 'site:ask' %}">Q/A</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <a href="{% url 'site:report' %}"><button {% block report %}
+                class="btn btn-outline-success my-2 my-sm-0 mx-3"
+                {% endblock report %}  type="button">Report</button></a>
+                <a href="{% url 'site:login' %}"><button class="btn btn-outline-success my-2 my-sm-0" type="button">Login</button></a>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    </nav>
+    {% endblock nav %}
+
+    {% block content %}{% endblock content %}
+
+    {% block footer %}
+
+        <footer class='bg-dark mt-5' id="foot">
+        <div class='container'>
+        <div class="dropdown-divider border-success"></div>
+        <div class="m-5">
+        <table class="table table-borderless table-dark">
+        <thead>
+            <tr>
+            <th scope="col">Solutions</th>
+            <th scope="col">Privacy & Terms</th>
+            <th scope="col">Company</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>walkthrough</td>
+            <td>have a question?</td>
+            <td>go for a test run</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>status</td>
+            <td>privacy</td>
+            <td>term</td>
+            </tr>
+            <tr>
+            <tr>
+            <td>about</td>
+            <td>contact us</td>
+            <td>blog</td>
+            </tr>
+        </tbody>
+        </table>
+        </div>
+        <div>
+        <div class="dropdown-divider border-success"></div>
+        <nav class="navbar navbar-expand-lg">
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <span>&copy; 2018</span>
+                </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="nav-item" href="#">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a class="nav-link active" href="#">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-facebook-square fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a class="nav-link active" href="#">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a class="nav-link active" href="#">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a class="nav-link active" href="#">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-snapchat fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a class="nav-link active" href="#">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </form>
+            </div>
+        </nav>
+        
+        </div>
+        </footer>
+
+    {% endblock footer %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  {% block js %}{% endblock js %}
+  </body>
+</html>

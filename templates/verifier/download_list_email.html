@@ -1,0 +1,14 @@
+<h1>Hi there,</h1>
+
+<h2>The email list you submitted along with you email : {{ email.email }}  is complete.
+<br>
+To download it click the link bellow,</h2>
+
+{{ protocol }}://{{ domain }}{% url 'verify:download' pk=email.pk %}
+
+<h4>If clicking the link above doesn't work, please copy and paste the URL
+in a new browser window instead.</h4>
+
+<p>If you didn't request this email. Then Please Ignore</p>
+
+<h1>Thanks,</h1> 

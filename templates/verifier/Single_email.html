@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load staticfiles %}
+
+{% block css %}
+  <link href="{% static 'css/accounts.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block Single-active %}
+    class="nav-item active"
+{% endblock Single-active %}
+
+{% block content %}
+<div class="row justify-content-center m-3">
+      <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="card bg-dark">
+          <div class="card-body">
+            <h3 class="card-title">Email Verification</h3>
+            <form method="post">
+              {% csrf_token %}
+              {% include 'include/forms.html' %}
+              <button type="submit" class="btn btn-primary btn-block">Verify</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% if data %}
+      <div class="container card-footer text-muted">
+              <br>
+              <br>
+              <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Email</th>
+                  <th scope="col">username</th>
+                  <th scope="col">domain</th>
+                  <th scope="col">code</th>
+                  <th scope="col">result</th>
+                  <th scope="col">message</th>
+                  <th scope="col">verified</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for items in data %}
+                    <td>{{ items }}</td>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+            </div>
+      {% endif %}
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block Q-active %}
+    class="nav-item active"
+{% endblock Q-active %}
+
+{% block content %}
+    <div class="row justify-content-center m-3">
+      <div class="col-lg-10 col-md-12 col-sm-14">
+        <div class="card bg-dark">
+          <div class="card-body">
+            <h3 class="card-title center">Ask Us Anything</h3>
+             <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'include/forms.html' %}
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              <br>
+              {% if messages %}{% for message in messages %}
+                <p class="alert alert-success test-center">{{ message }}<p>
+              {% endfor %}{% endif %}
+            </form>
+          </div>
+        </div>
+        <div class="container-fluid mt-5">
+            <table class="table table-hover table-dark">
+                <tbody>
+                    {% for q in questions %}
+                        {% if q.answer == "not answered" %}
+                        {% else %}
+                        <div class="bg-dark m-3">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card bg-dark">
+                                <div class="bg-dark" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        Q: {{ q.question }}
+                                    </h5>
+                                </div>
+                                </div>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        Ans: {{ q.answer }}
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
