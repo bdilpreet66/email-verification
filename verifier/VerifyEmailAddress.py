@@ -39,20 +39,26 @@ def verify_email(add):
 		else:
 			# MX record lookup
 			records = dns.resolver.query(domain, 'MX')
-			mxRecord = records[0].exchange
-			mxRecord = str(mxRecord)
+			for record in records:
+				mxRecord = record.exchange
+				mxRecord = str(mxRecord)
 
-			
-			# SMTP lib setup (use debug level for full output)
-			server = smtplib.SMTP()
-			server.set_debuglevel(0)
-			
-			# SMTP Conversation
-			server.connect(mxRecord)
-			server.helo(server.local_hostname) ### server.local_hostname(Get local server hostname)
-			server.mail(fromAddress)
-			code, message = server.rcpt(str(addressToVerify))
-			server.quit()
+				
+				# SMTP lib setup (use debug level for full output)
+				server = smtplib.SMTP()
+				server.set_debuglevel(0)
+				
+				# SMTP Conversation
+				try:
+					server.connect(mxRecord)
+				except:
+					continue
+				finally:
+					server.helo(server.local_hostname) ### server.local_hostname(Get local server hostname)
+					server.mail(fromAddress)
+					code, message = server.rcpt(str(addressToVerify))
+					server.quit()
+					break
 
 	return {'code':code,'message':message,'domain':domain,'user':user}
 

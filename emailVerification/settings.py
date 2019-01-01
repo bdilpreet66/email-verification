@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'django_celery_results',
     'widget_tweaks',
     'verifier',
-    'adminInterface',
     'django_celery_beat',
 ]
 

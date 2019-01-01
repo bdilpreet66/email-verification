@@ -3,13 +3,79 @@
 {% load static %}
 {% load staticfiles %}
 
-{% block css %}
-  <link href="{% static 'css/accounts.css' %}" rel="stylesheet">
-{% endblock css %}
+{% block title %}
+  Bulk Upload
+{% endblock title %}
 
-{% block List-active %}
-    class="nav-item active"
-{% endblock List-active %}
+{% block top_dropdown %}  
+  <div class="m-stack__item m-stack__item--middle m-brand__tools">
+    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-left m-dropdown--align-push" m-dropdown-toggle="click" aria-expanded="true">
+      <a href="" class="dropdown-toggle m-dropdown__toggle btn btn-outline-metal m-btn  m-btn--icon m-btn--pill">
+        <span>List Upload</span>
+      </a>
+      <div class="m-dropdown__wrapper">
+        <span class="m-dropdown__arrow m-dropdown__arrow--left m-dropdown__arrow--adjust"></span>
+        <div class="m-dropdown__inner">
+          <div class="m-dropdown__body">
+            <div class="m-dropdown__content">
+              <ul class="m-nav">
+                <li class="m-nav__section m-nav__section--first m--hide">
+                  <span class="m-nav__section-text">Quick Menu</span>
+                </li>  
+                    <li class="m-nav__item">
+                        <a href="{% url 'home' %}" class="m-nav__link">
+                            <i class="m-nav__link-icon flaticon-share"></i>
+                            <span class="m-nav__link-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="{% url 'verify:single' %}" class="m-nav__link">
+                            <i class="m-nav__link-icon flaticon-chat-1"></i>
+                            <span class="m-nav__link-text">Single Email Verification</span>
+                        </a>
+                    </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+{% endblock top_dropdown %}
+
+{% block navbar %}
+<div class="m-stack__item m-stack__item--middle m-stack__item--fluid">
+  <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-light " id="m_aside_header_menu_mobile_close_btn"><i class="la la-close"></i></button>
+    <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light ">
+      <ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
+        <li class="m-menu__item" aria-haspopup="true">
+            <a href="{% url 'home' %}" class="m-menu__link ">
+                <span class="m-menu__item-here"></span>
+                <span class="m-menu__link-text">Dashboard</span>
+            </a>
+        </li>
+
+        <li class="m-menu__item" m-menu-submenu-toggle="click" aria-haspopup="true">
+            <a href="{% url 'verify:single' %}" class="m-menu__link" title="To verify a single email address">
+                <span class="m-menu__item-here"></span>
+                <span class="m-menu__link-text">Single Email Verification</span>
+            </a>
+        </li>
+            
+        <li class="m-menu__item m-menu__item--active" m-menu-submenu-toggle="click" aria-haspopup="true">
+              <a href="{% url 'verify:list' %}" class="m-menu__link" title="To verify a list of email addresses">
+                  <span class="m-menu__item-here"></span>
+                  <span class="m-menu__link-text">List Upload</span>
+              </a>
+        </li>                                        
+      </ul>
+    </div>
+</div>
+{% endblock navbar %}
+
+
+{% block content_header %}
+List Upload
+{% endblock content_header %}
 
 {% block content %}
 
@@ -17,10 +83,7 @@
 
 {% for message in messages %}
     <div class="row justify-content-center m-3">
-      <div class="col-lg-6 col-md-8 col-sm-10">
-        <div class="card bg-dark">
           <div class="card-body">
-            <h3 class="card-title">Email Verification</h3>
               <div class="alert alert-info" role="alert">{{ message|safe }}</div>
              <form method="post" enctype="multipart/form-data">
                 <img src="{% static 'icon/csv.png' %}" style="width: 100px; height: 130px;" class="rounded mx-auto d-block">
@@ -29,24 +92,17 @@
               <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>
           </div>
-        </div>
-      </div>
     </div>
     {% endfor %}
 {% else %}
-<div class="row justify-content-center m-3">
-      <div class="col-lg-6 col-md-8 col-sm-10">
-        <div class="card bg-dark">
+<div class="row justify-content-center">
           <div class="card-body">
-            <h3 class="card-title center">Email Verification</h3>
              <form method="post" enctype="multipart/form-data">
                 <img src="{% static 'icon/csv.png' %}" style="width: 100px; height: 130px;" class="rounded mx-auto d-block">
                 {% csrf_token %}
                 {% include 'include/forms.html' %}
               <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>
-          </div>
-        </div>
       </div>
     </div>
   {% endif %}

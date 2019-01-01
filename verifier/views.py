@@ -17,11 +17,9 @@ from .VerifyEmailAddress import verify_email
 def Index(request):
     return render(request,'Index.html',{'form':forms.ListForm()})
 
-def Success(request):
-    return render(request,'verifier/Success.html')
-
 def SingleEmail(request):
     data = []
+    cur_email = "none"
     
     if request.method == 'POST':
         form = forms.SingleForm(request.POST)
@@ -29,8 +27,7 @@ def SingleEmail(request):
             email = form.save(commit=False)
             cur_email = email.email
             datadict = verify_email(email.email)
-            
-            data.append(cur_email)
+
             data.append(datadict['user'])
             data.append(datadict['domain'])
             data.append(datadict['code'])
@@ -49,11 +46,11 @@ def SingleEmail(request):
                 data.append('False')
 
         form = forms.SingleForm()
-        return render(request,'verifier/Single_email.html',{'form':form,'data':data})
+        return render(request,'verifier/Single_email.html',{'form':form,'data':data,'email':cur_email})
     else:
         form = forms.SingleForm()
 
-    return render(request,'verifier/Single_email.html',{'form':form,'data':data})
+    return render(request,'verifier/Single_email.html',{'form':form,'data':data,'email':cur_email})
 
 def ListUpload(request):
     
