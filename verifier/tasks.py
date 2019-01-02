@@ -1,8 +1,9 @@
 from celery import shared_task
-from django.utils.timezone import datetime,timedelta
+from django.utils.timezone import datetime,timedelta,now
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import get_template
 import csv,io
+from django.conf import settings
 
 # imports from app
 from .models import Documents
@@ -17,7 +18,7 @@ def DeleteData():
 
 @shared_task
 def VerificationDone(url):
-    email = models.Documents.objects.get(doc_name=url)
+    email = Documents.objects.get(doc_name=url)
     subject, from_email, to = 'Download Link [no reply]' , settings.EMAIL_HOST_USER , [email.email,]
 
     with open(settings.BASE_DIR+"/templates/verifier/download_list_email.html") as f:
@@ -94,7 +95,10 @@ def verify_list(url):
         for line in myfile:
             csv_writer.writerow(line)
     
-    VerificationDone.delay(str(File.url))
+    File.verified = True
+    File.uploaded_at = now()
+
+    VerificationDone.delay(str(File.doc_name))
 
         
     
