@@ -89,7 +89,11 @@ List Upload
                 <img src="{% static 'icon/csv.png' %}" style="width: 100px; height: 130px;" class="rounded mx-auto d-block">
                 {% csrf_token %}
                 {% include 'include/forms.html' %}
-              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              {% if ip.visted %}
+                  <h3>You have already verified a list once please come back in 3 days.</h3>
+              {% else %}
+                  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              {% endif %}
             </form>
           </div>
     </div>
@@ -101,7 +105,11 @@ List Upload
                 <img src="{% static 'icon/csv.png' %}" style="width: 100px; height: 130px;" class="rounded mx-auto d-block">
                 {% csrf_token %}
                 {% include 'include/forms.html' %}
-              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              {% if ip.visted %}
+                  <h3>You have already verified a list once please come back in 3 days.</h3>
+              {% else %}
+                  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              {% endif %}
             </form>
       </div>
     </div>

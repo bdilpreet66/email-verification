@@ -6,13 +6,15 @@ import csv,io
 from django.conf import settings
 
 # imports from app
-from .models import Documents
+from .models import Documents,IPUsers
 from .VerifyEmailAddress import verify_email
 
 @shared_task
 def DeleteData():
+    time_3_days_ago = datetime.now() - timedelta(days=3)
     time_24_hours_ago = datetime.now() - timedelta(days=1)
-    doc = Documents.objects.filter(uploaded_at__gte=time_24_hours_ago).delete()
+    Documents.objects.filter(uploaded_at__gte > time_24_hours_ago).delete()
+    IPUsers.objects.filter(timestamp__gte > time_3_days_ago).delete()
 
 
 

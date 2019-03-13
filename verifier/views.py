@@ -14,6 +14,17 @@ from .VerifyEmailAddress import verify_email
 # Create your views here.
 
 
+def get_ip(request):
+    try:
+        x_forward = request.META.get("HTTP_X_FORWARDED_FOR")
+        if x_forward:
+            ip = x_forward.split(",")[0]
+        else:
+            ip = request.META.get("REMOTE_ADDR")
+    except:
+        ip = ""
+    return ip
+
 def Index(request):
     return render(request,'Index.html',{'form':forms.ListForm()})
 
@@ -53,6 +64,8 @@ def SingleEmail(request):
     return render(request,'verifier/Single_email.html',{'form':form,'data':data,'email':cur_email})
 
 def ListUpload(request):
+    my_ip = get_ip(request)
+    ip = models.IPUsers.objects.get(ip_address=my_ip)
     
     if request.method == "POST":
         form = forms.ListForm(request.POST,request.FILES)
@@ -69,6 +82,10 @@ def ListUpload(request):
                         if count == 1:
                             url = str(email_list.doc_name)
                             verify_list.delay(url)
+                            ip,created = models.IPUsers.objects.get_or_create(ip_address=my_ip)
+                            ip.visted = True
+                            ip.timestamp = timezone.now()
+                            ip.save()
                             messages.success(request,"The File has been submitted Successfully. You will recieve an email when your file has been verified")
                         else:
                             messages.error(request,"This csv file doesn't contain the emails column or there are 2 columns named 'email' ")
@@ -83,7 +100,7 @@ def ListUpload(request):
     else:
         form = forms.ListForm
 
-    return render(request,'verifier/List_upload.html',{'form':form})
+    return render(request,'verifier/List_upload.html',{'ip':ip,'form':form})
 
 def Download(request,pk):
     File = get_object_or_404(models.Documents, pk=pk)
